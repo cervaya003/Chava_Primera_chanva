@@ -59,7 +59,7 @@ exports.registro = async (req, res) => {
     // Responder con token y datos del usuario
     res.status(201).json({
       success: true,
-      message: 'Usuario registrado exitosamente',
+      message: 'Usuario registrado exitosamente',  
       token,
       user: {
         id: usuarioGuardado._id,

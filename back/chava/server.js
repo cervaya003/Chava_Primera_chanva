@@ -57,6 +57,62 @@ mongoose.connect(process.env.MONGODB_URI)
 // Routes
 app.use('/users', require('./routes/authRoutes'));
 
+
+
+
+app.get('/api/personas', async (req, res) => {
+  try {
+    const personas = await Persona.find().sort({ createdAt: -1 });
+    res.json(personas);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/personas/:id', async (req, res) => {
+  try {
+    const persona = await Persona.findById(req.params.id);
+    if (!persona) return res.status(404).json({ error: 'Persona no encontrada' });
+    res.json(persona);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/api/personas', async (req, res) => {
+  try {
+    const persona = new Persona(req.body);
+    await persona.save();
+    res.status(201).json(persona);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+app.put('/api/personas/:id', async (req, res) => {
+  try {
+    const persona = await Persona.findByIdAndUpdate(
+      req.params.id, 
+      req.body, 
+      { new: true, runValidators: true }
+    );
+    if (!persona) return res.status(404).json({ error: 'Persona no encontrada' });
+    res.json(persona);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+app.delete('/api/personas/:id', async (req, res) => {
+  try {
+    const persona = await Persona.findByIdAndDelete(req.params.id);
+    if (!persona) return res.status(404).json({ error: 'Persona no encontrada' });
+    res.json({ message: 'Persona eliminada correctamente' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Ruta de prueba
 app.get('/', (req, res) => {
   res.json({ 
