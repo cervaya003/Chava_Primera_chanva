@@ -61,7 +61,7 @@ exports.registro = async (req, res) => {
       success: true,
       message: 'Usuario registrado exitosamente',  
       token,
-      user: {
+      user: {  
         id: usuarioGuardado._id,
         nombre: usuarioGuardado.nombre,
         email: usuarioGuardado.email,
